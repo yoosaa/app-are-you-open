@@ -1,0 +1,52 @@
+version: '3'
+
+
+services:
+  proxy:
+    container_name: proxy
+    build:
+      context: ./proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./proxy/public/:/etc/nginx/public
+      - ./ssl/certs/:/etc/pki/tls/certs/
+      - ./ssl/private/:/etc/pki/tls/private/
+    depends_on:
+      - app
+    networks:
+      - network
+
+  app:
+    container_name: app
+    build:
+      context: ./app
+    volumes:
+      - ./app:/var/www/
+    depends_on:
+      - mongo
+    networks:
+      - network
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.2.0
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./mongo/db:/data/db
+      - ./mongo/configdb:/data/configdb
+      - ./mongo/init:/docker-entrypoint-initdb.d
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: <root_user_name>
+      MONGO_INITDB_ROOT_PASSWORD: <root_password>
+      MONGO_INITDB_DATABASE: <database_name>
+      TZ: Asia/Tokyo
+
+volumes:
+  db_data: {}
+
+networks:
+  network:
+    driver: bridge
