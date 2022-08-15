@@ -44,18 +44,16 @@ export default {
     const vuexManage = useStore()
     const stores = ref([])
 
-    onMounted(() => {
-      getLocation()
-      .then(latLong => {
-        vuexManage.dispatch('getPlaces')
-        .then(() => {
-          updateStores()
-        })
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    })
+    getLocation()
+     .then(latLong => {
+       vuexManage.dispatch('getPlaces')
+       .then(() => {
+         updateStores()
+       })
+     })
+     .catch(error => {
+       console.log(error)
+     })
 
     const radius = computed(() => {
       return vuexManage.getters.getRadius
