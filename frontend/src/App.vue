@@ -115,7 +115,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Work+Sans:wght@400;700&display=swap');
 
 main {
   padding-bottom: 48px;
@@ -137,19 +137,19 @@ main {
   overflow: hidden;
   background-color: #fff;
   &-contents {
-    width: 70%;
+    width: 65%;
   }
   &-name {
     font-size: 1rem;
   }
   &-text {
-    width: 30%;
+    width: 35%;
     height: 100%;
     font-size: 1.2rem;
     text-align: center;
     position: relative;
     display: block;
-    margin-right: 24px;
+    margin-right: 20px;
     color: #fff;
     &.red {
       background-image: linear-gradient(90deg, rgba(252, 16, 85, 1), rgba(255, 255, 255, 1));
@@ -199,7 +199,7 @@ main {
     margin: 0 0 2em 0;
     padding: 0;
     &-name {
-      font-size: .9rem;
+      font-size: 1rem;
       margin-bottom: 8px;
     }
     &-contents {

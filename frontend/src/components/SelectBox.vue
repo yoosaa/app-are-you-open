@@ -2,14 +2,29 @@
   <div class="cp_ipselect">
     <select class="cp_sl06"
       @change="setRadius"
+      v-model="selected"
     >
-      <option value="100" selected>100m</option>
-      <option value="500">500m</option>
-      <option value="1000">1km</option>
-      <option value="1500">1.5km</option>
-      <option value="2000">2km</option>
-      <option value="2500">2.5km</option>
-      <option value="3000">3km</option>
+      <option value="100" selected
+        :disabled="selected === '100'"
+      >100m</option>
+      <option value="500"
+        :disabled="selected === '500'"
+      >500m</option>
+      <option value="1000"
+        :disabled="selected === '1000'"
+      >1km</option>
+      <option value="1500"
+        :disabled="selected === '1500'"
+      >1.5km</option>
+      <option value="2000"
+        :disabled="selected === '2000'"
+      >2km</option>
+      <option value="2500"
+        :disabled="selected === '2500'"
+      >2.5km</option>
+      <option value="3000"
+        :disabled="selected === '3000'"
+      >3km</option>
     </select>
     <span class="cp_sl06_highlight"></span>
     <span class="cp_sl06_selectbar"></span>
@@ -18,19 +33,23 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
-    setup () {
-        const vuexManage = useStore()
-        const setRadius = e => {
-            vuexManage.commit('setRadius', e.target.value)
-        }
-
-        return {
-            setRadius
-        }
+  setup () {
+    const vuexManage = useStore()
+    const setRadius = e => {
+      vuexManage.commit('setRadius', e.target.value)
     }
+
+    const selected = ref('100')
+
+    return {
+      setRadius,
+      selected
+    }
+  }
 }
 </script>
 
