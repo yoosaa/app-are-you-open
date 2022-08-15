@@ -1,6 +1,6 @@
 <template>
     <div class="cp_ipselect">
-        <select class="cp_sl06" v-on:change="setRadius">
+        <select class="cp_sl06" @change="setRadius">
             <option value="100" selected>100m</option>
             <option value="500">500m</option>
             <option value="1000">1km</option>
