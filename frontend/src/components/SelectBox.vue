@@ -1,6 +1,8 @@
 <template>
     <div class="cp_ipselect">
-        <select class="cp_sl06" @change="setRadius">
+        <select class="cp_sl06"
+　　　　　　@change="setRadius"
+　　　　　>
             <option value="100" selected>100m</option>
             <option value="500">500m</option>
             <option value="1000">1km</option>
@@ -21,7 +23,6 @@ import { useStore } from 'vuex'
 export default {
     setup () {
         const vuexManage = useStore()
-
         const setRadius = e => {
             vuexManage.commit('setRadius', e.target.value)
         }
@@ -37,21 +38,21 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap');
 
 .cp_ipselect {
-	position: relative;
-	width: 30%;
-    margin-top: 75px;
-	margin-left: calc((100% - 85%) / 2);
-	text-align: center;
-    font-family: 'Work Sans', sans-serif;
-    .cp_s106 {
-        appearance: none;
-        -webkit-appearance:none
+　position: relative;
+　width: 30%;
+　margin-top: 75px;
+　margin-left: calc((100% - 85%) / 2);
+　text-align: center;
+  font-family: 'Work Sans', sans-serif;
+  .cp_s106 {
+    appearance: none;
+    -webkit-appearance:none
+  }
+  select {
+    &::-ms-expand {
+    　display: none;
     }
-    select {
-        &::-ms-expand {
-            display: none;
-        }
-    }
+  }
     &::after {
         position: absolute;
         top: 18px;
