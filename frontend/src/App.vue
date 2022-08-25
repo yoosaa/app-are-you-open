@@ -3,7 +3,7 @@
   <main>
     <SelectBox />
     <section
-      v-if="isListDisplay"
+      v-if="isDisplayList"
     >
       <ul id="cards">
         <li class="card"
@@ -25,6 +25,11 @@
     <p class="no-cards"
       v-else
     >データが取得できませんでした。</p>
+    <Map
+      :lat="latitude"
+      :long="longitude"
+      ref="mapRef"
+    />
   </main>
 </template>
 
@@ -34,15 +39,18 @@ import { useStore } from 'vuex'
 
 import Header from './components/Header.vue'
 import SelectBox from './components/SelectBox.vue'
+import Map from './components/Map.vue'
 
 export default {
   components: {
     Header,
-    SelectBox
-  },
+    SelectBox,
+    Map
+},
   setup () {
     const vuexManage = useStore()
-    const stores = ref([])
+    let latitude = ref(null)
+    let longitude = ref(null)
     const getLocation = () => {
       return new Promise((resolve, reject) => {
         const options = {
@@ -53,11 +61,11 @@ export default {
 
         navigator.geolocation.getCurrentPosition(pos => {
           let cord = pos.coords
-          const latitude = cord.latitude
-          const longitude = cord.longitude
+          latitude.value = Number(cord.latitude)
+          longitude.value = Number(cord.longitude)
 
-          vuexManage.commit('setLocation', `${latitude},${longitude}`)
-          resolve(`${latitude},${longitude}`)
+          vuexManage.commit('setLocation', `${latitude.value},${longitude.value}`)
+          resolve(`${latitude.value},${longitude.value}`)
         }, () => {
           alert('位置情報の取得に失敗しました。')
           reject()
@@ -65,11 +73,14 @@ export default {
       })
     }
 
+    const mapRef = ref({})
     getLocation()
      .then(latLong => {
        vuexManage.dispatch('getPlaces')
        .then(() => {
          updateStores()
+         console.log(mapRef.value)
+         mapRef.value.initMap()
        })
      })
      .catch(error => {
@@ -89,10 +100,9 @@ export default {
 
     const displayStores = ref([])
     const updateStores = () => {
-      sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getStores))
-      stores.value = vuexManage.getters.getStores
-      displayStores.value = []
-      stores.value.forEach(element => {
+      sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getPlaces))
+      const stores = vuexManage.getters.getPlaces
+      stores.forEach(element => {
         let inner = []
         inner.push(element.name);
         inner.push(element['opening_hours']['open_now'] ? 'OPEN' : 'CLOSED')
@@ -101,14 +111,17 @@ export default {
       });
     }
 
-    const isListDisplay = computed(() => {
+    const isDisplayList = computed(() => {
       if (displayStores.value.length > 0) return true
       else return false
     })
 
     return {
       displayStores,
-      isListDisplay
+      isDisplayList,
+      mapRef,
+      latitude,
+      longitude
     }
   }
 }
