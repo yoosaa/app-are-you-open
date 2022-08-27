@@ -79,7 +79,6 @@ export default {
        vuexManage.dispatch('getPlaces')
        .then(() => {
          updateStores()
-         console.log(import.meta.env)
          mapRef.value.initMap()
        })
      })
@@ -95,6 +94,7 @@ export default {
     const updateStores = () => {
       sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getPlaces))
       const stores = vuexManage.getters.getPlaces
+      console.log(stores)
       stores.forEach(element => {
         let inner = []
         inner.push(element.name);

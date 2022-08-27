@@ -45,24 +45,25 @@ export default {
 
       mapLoader.load()
       .then(google => {
-        new google.map.Map(mapRef, mapOptions)
+        new google.maps.Map(mapRef.value, mapOptions)
       })
-      .catch(() => {
+      .catch(e => {
+        console.log(e)
         isDisplayMap.value = false
       })
 
-      vuexManage.getters.getMapPoints.forEach(d => {
-        mapLatLong = new window.google.maps.LatLng(
-          d.lat,
-          d.long
-        )
-        marker.push(
-          new window.google.maps.Marker({
-            position: mapLatLong,
-            map: targetMap
-          })
-        )
-      })
+      // vuexManage.getters.getMapPoints.forEach(d => {
+      //   mapLatLong = new window.google.maps.LatLng(
+      //     d.lat,
+      //     d.long
+      //   )
+      //   marker.push(
+      //     new window.google.maps.Marker({
+      //       position: mapLatLong,
+      //       map: targetMap
+      //     })
+      //   )
+      // })
     }
 
     return {
