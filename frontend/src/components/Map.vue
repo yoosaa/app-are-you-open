@@ -1,10 +1,15 @@
 <template>
   <section id="map"
+    v-if="isDisplayMap"
     ref="mapRef"
   ></section>
+  <p
+    v-else
+  >地図の表示に失敗しました</p>
 </template>
 
 <script>
+import { Loader } from '@googlemaps/js-api-loader'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 
@@ -20,17 +25,30 @@ export default {
     }
   },
   setup (props) {
+    const mapLoader = new Loader({
+      apiKey: import.meta.env.VITE_MAP_JS_API_KEY,
+      version: "weekly"
+    })
     const vuexManage = useStore()
     const mapRef = ref({})
+    const isDisplayMap = ref(true)
     let marker = []
+
     const initMap = () => {
-      let mapLatLong = new window.google.maps.LatLng(
-        props.lat,
-        props.long
-      )
-      let targetMap = new window.google.maps.Map(mapRef.value, {
-        center: mapLatLong,
+      let mapOptions = {
+        center: {
+          lat:props.lat,
+          lng:props.long
+        },
         zoom: 15
+      }
+
+      mapLoader.load()
+      .then(google => {
+        new google.map.Map(mapRef, mapOptions)
+      })
+      .catch(() => {
+        isDisplayMap.value = false
       })
 
       vuexManage.getters.getMapPoints.forEach(d => {
@@ -49,7 +67,8 @@ export default {
 
     return {
       mapRef,
-      initMap
+      initMap,
+      isDisplayMap
     }
   }
 }

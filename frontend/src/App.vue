@@ -79,7 +79,7 @@ export default {
        vuexManage.dispatch('getPlaces')
        .then(() => {
          updateStores()
-         console.log(mapRef.value)
+         console.log(import.meta.env)
          mapRef.value.initMap()
        })
      })
@@ -91,13 +91,6 @@ export default {
       return vuexManage.getters.getRadius
     })
 
-    watch(radius, () => {
-      vuexManage.dispatch('getPlaces')
-      .then(() => {
-        updateStores()
-      })
-    })
-
     const displayStores = ref([])
     const updateStores = () => {
       sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getPlaces))
@@ -107,6 +100,7 @@ export default {
         inner.push(element.name);
         inner.push(element['opening_hours']['open_now'] ? 'OPEN' : 'CLOSED')
         inner.push(element['opening_hours']['open_now'] ? 'green' : 'red')
+        console.log(displayStores)
         displayStores.value.push(inner)
       });
     }
@@ -114,6 +108,13 @@ export default {
     const isDisplayList = computed(() => {
       if (displayStores.value.length > 0) return true
       else return false
+    })
+
+    watch(radius, () => {
+      vuexManage.dispatch('getPlaces')
+      .then(() => {
+        updateStores()
+      })
     })
 
     return {

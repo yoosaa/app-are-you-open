@@ -61,7 +61,7 @@ export default createStore({
     getPlaces: async function (context) {
       const config = {
         method: 'get',
-        url: 'http://localhost/api/places',
+        url: 'http://localhost:80/api/places',
         params: {
           'latlong': context.state.location,
           'radius': context.state.radius
@@ -72,6 +72,7 @@ export default createStore({
 
       await axios(config)
         .then(function (response) {
+          console.log(response)
           context.commit('setFilterdPlaces', response)
           context.commit('setMapPoints', context.state.places)
         })
