@@ -40,7 +40,7 @@ export default {
           lat:props.lat,
           lng:props.long
         },
-        zoom: 15
+        zoom: 12
       }
 
       mapLoader.load()
