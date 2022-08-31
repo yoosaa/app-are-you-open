@@ -41,9 +41,7 @@ export default {
     font-family: 'Work Sans', sans-serif;
     font-weight: 400;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    width: 75%;
-    margin: 24px auto 1em auto;
-    padding-right: 6px;
+    width: 100%;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -96,46 +94,35 @@ export default {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 0;
+    .card {
+      position: relative;
+      margin: 0 0 2em 0;
+      padding: 0;
+      &-name {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+      &-contents {
+        margin: auto;
+        letter-spacing: 0.07em;
+        width: 85%;
+      }
+      &-text {
+        width: 100%;
+        text-align: start;
+        font-family: 'Oswald', sans-serif;
+        &-inner {
+          position: absolute;
+          display: inline;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
   }
   h2 {
     width: 85%;
-  }
-  .card {
-    display: block;
-    position: relative;
-    aspect-ratio: 327/256;
-    width: calc((100% - 3em) / 3);
-    margin: 0 0 2em 0;
-    padding: 0;
-    &-name {
-      font-size: 1rem;
-      margin-bottom: 8px;
-    }
-    &-contents {
-      margin: auto;
-      height: 25%;
-      letter-spacing: 0.07em;
-      width: 85%;
-    }
-    &-text {
-      width: 100%;
-      height: 75%;
-      font-size: 1.8rem;
-      font-family: 'Oswald', sans-serif;
-      &.red {
-        background-image: linear-gradient(180deg, rgba(252, 16, 85, 1), rgba(255, 255, 255, 1));
-      }
-      &.green {
-        background-image: linear-gradient(180deg, rgba(16, 252, 48, 1), rgba(255, 255, 255, 1));
-      }
-      &-inner {
-        position: absolute;
-        display: inline;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
   }
 }
 @media (min-width: 1026px) {

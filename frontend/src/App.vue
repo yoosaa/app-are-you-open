@@ -2,21 +2,24 @@
   <Header />
   <main>
     <SelectBox />
-    <section
-      v-if="isDisplayList"
-    >
-      <Cards
-        :datas="displayStores"
+    <div id="flex-wrap">
+      <section
+        id="cards-wrapper"
+        v-if="isDisplayList"
+      >
+        <Cards
+          :datas="displayStores"
+        />
+      </section>
+      <p class="no-cards"
+        v-else
+      >データが取得できませんでした。</p>
+      <Map
+        :lat="latitude"
+        :long="longitude"
+        ref="mapRef"
       />
-    </section>
-    <p class="no-cards"
-      v-else
-    >データが取得できませんでした。</p>
-    <Map
-      :lat="latitude"
-      :long="longitude"
-      ref="mapRef"
-    />
+    </div>
   </main>
 </template>
 
@@ -121,9 +124,21 @@ export default {
 main {
   padding-bottom: 48px;
 }
+#flex-wrap {
+  display: flex;
+}
+#cards-wrapper {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 30vw;
+  height: 100vh;
+  overflow-y: scroll;
+  background-color: rgba(255, 255, 255, .8);
+}
 .no-cards {
   font-size: 1.4rem;
-  width: 100%;
+  width: 30vw;
   margin-top: 56px;
   text-align: center;
 }

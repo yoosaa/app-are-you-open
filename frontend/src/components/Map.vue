@@ -77,11 +77,10 @@ export default {
 
 <style lang="scss">
 #map {
-  width: 100vw;
+  width: 70vw;
   height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
 }
 </style>
