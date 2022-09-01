@@ -38,7 +38,7 @@ export default {
     SelectBox,
     Map,
     Cards
-},
+  },
   setup () {
     const vuexManage = useStore()
     let latitude = ref(null)
