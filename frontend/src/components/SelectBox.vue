@@ -1,5 +1,5 @@
 <template>
-  <div class="cp_ipselect">
+  <section class="cp_ipselect">
     <select class="cp_sl06"
       @change="setRadius"
       v-model="selected"
@@ -29,7 +29,7 @@
     <span class="cp_sl06_highlight"></span>
     <span class="cp_sl06_selectbar"></span>
     <label class="cp_sl06_selectlabel">Choose Radius</label>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -59,8 +59,8 @@ export default {
 .cp_ipselect {
   position: relative;
   width: 30%;
-  margin-top: 75px;
-  margin-left: calc((100% - 85%) / 2);
+  margin-top: 40px;
+  margin-bottom: 26px;
   text-align: center;
   font-family: 'Work Sans', sans-serif;
   .cp_s106 {

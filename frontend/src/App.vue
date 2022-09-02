@@ -13,7 +13,7 @@
       </section>
       <p class="no-cards"
         v-else
-      >データが取得できませんでした。</p>
+      >{{ errorMessage }}</p>
       <Map
         :lat="latitude"
         :long="longitude"
@@ -41,8 +41,8 @@ export default {
   },
   setup () {
     const vuexManage = useStore()
-    let latitude = ref(null)
-    let longitude = ref(null)
+    const latitude = ref(null)
+    const longitude = ref(null)
     const getLocation = () => {
       return new Promise((resolve, reject) => {
         const options = {
@@ -95,9 +95,17 @@ export default {
       });
     }
 
+    const errorMessage = ref('')
     const isDisplayList = computed(() => {
-      if (displayStores.value.length > 0) return true
-      else return false
+      if (displayStores.value.length > 0) {
+        return true
+      } else if (displayStores.value.length === 0) {
+        errorMessage.value = '条件に一致する結果がありません。'
+        return false
+      } else {
+        errorMessage.value = 'データが取得できませんでした。'
+        return false
+      }
     })
 
     watch(radius, () => {
@@ -110,6 +118,7 @@ export default {
     return {
       displayStores,
       isDisplayList,
+      errorMessage,
       mapRef,
       latitude,
       longitude
@@ -141,5 +150,10 @@ main {
   width: 30vw;
   margin-top: 56px;
   text-align: center;
+}
+@media (min-width: 601px) {
+  main {
+    padding-left: 24px;
+  }
 }
 </style>
