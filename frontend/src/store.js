@@ -29,6 +29,7 @@ export default createStore({
       }
       state.mapPoints = []
       places.forEach(place => {
+        console.log(place)
         pushItem.name = place.name
         pushItem.lat = Number(place.geometry.location.lat)
         pushItem.long = Number(place.geometry.location.lng)
@@ -72,7 +73,6 @@ export default createStore({
 
       await axios(config)
         .then(function (response) {
-          console.log(response)
           context.commit('setFilterdPlaces', response)
           context.commit('setMapPoints', context.state.places)
         })

@@ -1,7 +1,7 @@
 <template>
   <section id="map"
     v-if="isDisplayMap"
-    ref="mapRef"
+    ref="displayMapAreaRef"
   ></section>
   <p
     v-else
@@ -30,9 +30,8 @@ export default {
       version: "weekly"
     })
     const vuexManage = useStore()
-    const mapRef = ref({})
+    const displayMapAreaRef = ref({})
     const isDisplayMap = ref(true)
-    let marker = []
 
     const initMap = () => {
       let mapOptions = {
@@ -43,31 +42,33 @@ export default {
         zoom: 12
       }
 
+      let map = {}
       mapLoader.load()
       .then(google => {
-        new google.maps.Map(mapRef.value, mapOptions)
+        map = new google.maps.Map(displayMapAreaRef.value, mapOptions)
+
+        let marker = {}
+        let latlong = {}
+        console.log(vuexManage.getters.getMapPoints)
+        vuexManage.getters.getMapPoints.forEach(d => {
+          console.log(d)
+          latlong = new google.maps.LatLng(d.lat, d.long)
+          marker = new google.maps.Marker({
+            position: latlong,
+            title: d.name
+          })
+          marker.setMap(map)
+        })
       })
       .catch(e => {
         console.log(e)
         isDisplayMap.value = false
       })
 
-      // vuexManage.getters.getMapPoints.forEach(d => {
-      //   mapLatLong = new window.google.maps.LatLng(
-      //     d.lat,
-      //     d.long
-      //   )
-      //   marker.push(
-      //     new window.google.maps.Marker({
-      //       position: mapLatLong,
-      //       map: targetMap
-      //     })
-      //   )
-      // })
     }
 
     return {
-      mapRef,
+      displayMapAreaRef,
       initMap,
       isDisplayMap
     }

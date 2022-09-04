@@ -84,13 +84,11 @@ export default {
     const updateStores = () => {
       sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getPlaces))
       const stores = vuexManage.getters.getPlaces
-      console.log(stores)
       stores.forEach(element => {
         let inner = []
         inner.push(element.name);
         inner.push(element['opening_hours']['open_now'] ? 'OPEN' : 'CLOSED')
         inner.push(element['opening_hours']['open_now'] ? 'green' : 'red')
-        console.log(displayStores)
         displayStores.value.push(inner)
       });
     }
@@ -112,6 +110,7 @@ export default {
       vuexManage.dispatch('getPlaces')
       .then(() => {
         updateStores()
+        mapRef.value.initMap()
       })
     })
 
