@@ -22,14 +22,12 @@ export default createStore({
       })
     },
     setMapPoints: function (state, places) {
-      let pushItem = {
-        name: '',
-        lat: null,
-        long: null
-      }
-      state.mapPoints = []
       places.forEach(place => {
-        console.log(place)
+        const pushItem = {
+          name: '',
+          lat: null,
+          long: null
+        }
         pushItem.name = place.name
         pushItem.lat = Number(place.geometry.location.lat)
         pushItem.long = Number(place.geometry.location.lng)
@@ -45,7 +43,6 @@ export default createStore({
   },
   getters: {
     getLocation: function (state) {
-      console.log(state.location)
       return state.location
     },
     getRadius: function (state) {
@@ -69,7 +66,6 @@ export default createStore({
         }
       }
 
-      console.log(config)
 
       await axios(config)
         .then(function (response) {
@@ -77,7 +73,6 @@ export default createStore({
           context.commit('setMapPoints', context.state.places)
         })
         .catch(function (error) {
-          console.log(`ERROR => ${error}`)
         })
     }
   }
