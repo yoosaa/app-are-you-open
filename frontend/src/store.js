@@ -22,6 +22,7 @@ export default createStore({
       })
     },
     setMapPoints: function (state, places) {
+      state.mapPoints = []
       places.forEach(place => {
         const pushItem = {
           name: '',
@@ -73,6 +74,7 @@ export default createStore({
           context.commit('setMapPoints', context.state.places)
         })
         .catch(function (error) {
+          console.error(error)
         })
     }
   }

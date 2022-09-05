@@ -75,7 +75,7 @@ export default {
        })
      })
      .catch(error => {
-       console.log(error)
+       console.error(error)
      })
 
     const radius = computed(() => { return vuexManage.getters.getRadius })
@@ -84,6 +84,7 @@ export default {
     const updateStores = () => {
       sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getPlaces))
       const stores = vuexManage.getters.getPlaces
+      console.log(stores)
       stores.forEach(element => {
         let inner = []
         inner.push(element.name);

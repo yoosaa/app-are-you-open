@@ -2,7 +2,7 @@
   <ul id="cards">
     <li class="card"
       v-for="val in displayDatas"
-      :key="val[0]"
+      :key="val[0][0]"
     >
       <p
         :class="['card-text', val[2]]"
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, ref } from 'vue'
 
 export default {
   props: {
@@ -27,7 +27,7 @@ export default {
     }
   },
   setup (props) {
-    const displayDatas = computed(() => { return props.datas })
+    const displayDatas = computed(() => props.datas)
 
     return { displayDatas }
   },
