@@ -18,16 +18,27 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { ref, watch, onUpdated } from 'vue'
 
 export default {
   props: {
     datas: {
-      type: Object
+      type: Object,
+      require: true
     }
   },
   setup (props) {
-    const displayDatas = computed(() => props.datas)
+    const displayDatas = ref([])
+    displayDatas.value = props.datas
+
+    watch(() => props.datas, (newProps, _) => {
+      console.log(newProps)
+      displayDatas.value = newProps
+    },{ deep: true })
+
+    onUpdated(() => {
+      console.log('updated')
+    })
 
     return { displayDatas }
   },

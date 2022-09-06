@@ -82,9 +82,9 @@ export default {
 
     const displayStores = ref([])
     const updateStores = () => {
+      displayStores.value = []
       sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getPlaces))
       const stores = vuexManage.getters.getPlaces
-      console.log(stores)
       stores.forEach(element => {
         let inner = []
         inner.push(element.name);
@@ -92,6 +92,7 @@ export default {
         inner.push(element['opening_hours']['open_now'] ? 'green' : 'red')
         displayStores.value.push(inner)
       });
+      console.log(displayStores.value)
     }
 
     const errorMessage = ref('')
