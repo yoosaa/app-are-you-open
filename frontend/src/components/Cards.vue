@@ -32,7 +32,6 @@ export default {
     displayDatas.value = props.datas
 
     watch(() => props.datas, (newProps, _) => {
-      console.log(newProps)
       displayDatas.value = newProps
     },{ deep: true })
 

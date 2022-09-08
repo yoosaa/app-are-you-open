@@ -49,9 +49,7 @@ export default {
 
         let marker = {}
         let latlong = {}
-        console.log(vuexManage.getters.getMapPoints)
         vuexManage.getters.getMapPoints.forEach(d => {
-          // console.log(d)
           latlong = new google.maps.LatLng(d.lat, d.long)
           marker = new google.maps.Marker({
             position: latlong,
@@ -61,7 +59,6 @@ export default {
         })
       })
       .catch(e => {
-        console.alert(e)
         isDisplayMap.value = false
       })
     }

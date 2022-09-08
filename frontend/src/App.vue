@@ -92,7 +92,6 @@ export default {
         inner.push(element['opening_hours']['open_now'] ? 'green' : 'red')
         displayStores.value.push(inner)
       });
-      console.log(displayStores.value)
     }
 
     const errorMessage = ref('')
