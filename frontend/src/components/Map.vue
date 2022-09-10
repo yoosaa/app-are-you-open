@@ -74,7 +74,12 @@ export default {
 
 <style lang="scss">
 #map {
-  width: 70vw;
+  width: 100vw;
   height: 100vh;
+}
+@media (min-width: 601px) {
+  #map {
+    width: 70vw;
+  }
 }
 </style>

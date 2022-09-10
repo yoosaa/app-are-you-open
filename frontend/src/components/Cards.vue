@@ -1,12 +1,11 @@
 <template>
   <ul id="cards">
-    <li class="card"
+    <li
+      :class="['card', val[2]]"
       v-for="val in displayDatas"
       :key="val[0][0]"
     >
-      <p
-        :class="['card-text', val[2]]"
-      >
+      <p class="card-text">
         <span class="card-text-inner">{{ val[1] }}</span>
       </p>
       <div class="card-contents">
@@ -42,44 +41,34 @@ export default {
 
 <style lang="scss">
 #cards {
-  margin-top: 56px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: scroll;
   .card {
+    min-width: 30vw;
+    width: 100%;
+    padding: 4px;
     font-family: 'Work Sans', sans-serif;
     font-weight: 400;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    width: 100%;
-    border-radius: 20px;
-    display: flex;
     align-items: center;
     font-weight: 600;
-    overflow: hidden;
     background-color: #fff;
-    &-contents {
-      width: 65%;
+    border-right: 1px solid rgba(0 , 0 , 0, .5);
+    &.red {
+      background: rgba(252, 16, 85, .5);
+    }
+    &.green {
+      background: rgba(16, 252, 48, .5);
     }
     &-name {
       font-size: 1rem;
     }
     &-text {
-      width: 35%;
-      height: 100%;
       font-size: 1.2rem;
-      text-align: center;
       position: relative;
       display: block;
       margin-right: 20px;
       color: #fff;
-      &.red {
-        background-image: linear-gradient(90deg, rgba(252, 16, 85, 1), rgba(255, 255, 255, 1));
-      }
-      &.green {
-        background-image: linear-gradient(90deg, rgba(16, 252, 48, 1), rgba(255, 255, 255, 1));
-      }
-      &-inner {
-        position: relative;
-        padding: 12px 0;
-        display: inline-block;
-      }
     }
   }
 }
@@ -93,37 +82,28 @@ export default {
 }
 @media (min-width: 601px) {
   #cards {
-    width: 85%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 0;
+    display: block;
+    overflow-x: auto;
     .card {
-      position: relative;
-      margin: 0 0 2em 0;
-      padding: 0;
+      min-width: none;
+      min-height: 80px;
+      display: block;
+      border-top: 1px solid rgba(0 , 0 , 0, .5);
+      border-right: none;
+      &:first-child {
+        border-top: none;
+      }
       &-name {
         font-size: 1rem;
         margin-bottom: 8px;
-      }
-      &-contents {
-        margin: auto;
-        letter-spacing: 0.07em;
-        width: 85%;
       }
       &-text {
         width: 100%;
         text-align: start;
         font-family: 'Oswald', sans-serif;
-        &-inner {
-          position: absolute;
-          display: inline;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
+      }
+      &-contents {
+        margin-top: 8px;
       }
     }
   }
@@ -134,7 +114,6 @@ export default {
 @media (min-width: 1026px) {
   .card {
     &-contents {
-      width: 80%;
       bottom: 20px;
     }
     &-name {

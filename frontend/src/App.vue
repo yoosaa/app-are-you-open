@@ -83,7 +83,6 @@ export default {
     const displayStores = ref([])
     const updateStores = () => {
       displayStores.value = []
-      sessionStorage.setItem('stores', JSON.stringify(vuexManage.getters.getPlaces))
       const stores = vuexManage.getters.getPlaces
       stores.forEach(element => {
         let inner = []
@@ -130,30 +129,32 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Work+Sans:wght@400;700&display=swap');
 
-main {
-  padding-bottom: 48px;
-}
-#flex-wrap {
-  display: flex;
-}
 #cards-wrapper {
+  width: 100vw;
+  height: 10vh;
+  bottom: 0;
   position: sticky;
-  top: 0;
-  left: 0;
-  width: 30vw;
-  height: 100vh;
-  overflow-y: scroll;
-  background-color: rgba(255, 255, 255, .8);
 }
 .no-cards {
   font-size: 1.4rem;
-  width: 30vw;
-  margin-top: 56px;
+  position: sticky;
+  bottom: 0;
   text-align: center;
 }
 @media (min-width: 601px) {
-  main {
-    padding-left: 24px;
+  #flex-wrap {
+    display: flex;
+  }
+  #cards-wrapper {
+    width: 30vw;
+    height: 100vh;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: scroll;
+  }
+  .no-cards {
+    width: 30vw;
+    margin-top: 56px;
   }
 }
 </style>
