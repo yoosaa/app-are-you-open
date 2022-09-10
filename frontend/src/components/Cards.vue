@@ -35,10 +35,6 @@ export default {
       displayDatas.value = newProps
     },{ deep: true })
 
-    onUpdated(() => {
-      console.log('updated')
-    })
-
     return { displayDatas }
   },
 }

@@ -39,7 +39,7 @@ export default {
           lat:props.lat,
           lng:props.long
         },
-        zoom: 12
+        zoom: 16
       }
 
       let map = {}
