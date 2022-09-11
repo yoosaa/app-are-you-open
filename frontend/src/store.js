@@ -9,8 +9,7 @@ export default createStore({
     places: [],
     mapPoints: [],
     location: '',
-    radius: 100,
-    language: 'ja'
+    radius: 100
   },
   mutations: {
     setResponse: function (state, res) {

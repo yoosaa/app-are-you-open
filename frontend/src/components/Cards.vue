@@ -54,6 +54,9 @@ export default {
     font-weight: 600;
     background-color: #fff;
     border-right: 1px solid rgba(0 , 0 , 0, .5);
+    &:first-child {
+      border-right: none;
+    }
     &.red {
       background: rgba(252, 16, 85, .5);
     }
