@@ -1,7 +1,9 @@
 <template>
   <Header />
   <main>
-    <SelectBox />
+    <SelectBox
+      v-model=""
+    />
     <div id="flex-wrap">
       <section
         id="cards-wrapper"
@@ -25,12 +27,13 @@
 
 <script>
 import { ref, computed, watch } from 'vue'
-import { useStore } from 'vuex'
 
 import Header from './components/Header.vue'
 import SelectBox from './components/SelectBox.vue'
 import Map from './components/Map.vue'
 import Cards from './components/Cards.vue'
+
+import MapController from './js/map.js'
 
 export default {
   components: {
@@ -40,35 +43,13 @@ export default {
     Cards
   },
   setup () {
-    const vuexManage = useStore()
-    const latitude = ref(null)
-    const longitude = ref(null)
-    const getLocation = () => {
-      return new Promise((resolve, reject) => {
-        const options = {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        };
-
-        navigator.geolocation.getCurrentPosition(pos => {
-          let cord = pos.coords
-          latitude.value = Number(cord.latitude)
-          longitude.value = Number(cord.longitude)
-
-          vuexManage.commit('setLocation', `${latitude.value},${longitude.value}`)
-          resolve(`${latitude.value},${longitude.value}`)
-        }, () => {
-          alert('位置情報の取得に失敗しました。')
-          reject()
-        }, options)
-      })
-    }
+    const mapController = new MapController()
+    const radius = ref(100)
 
     const mapRef = ref({})
-    getLocation()
+    mapController.getTerminalLocation()
      .then(() => {
-       vuexManage.dispatch('getPlaces')
+       mapController.getDataOfPlaceAry(radius.value)
        .then(() => {
          updateStores()
          mapRef.value.initMap()
@@ -78,13 +59,10 @@ export default {
        console.error(error)
      })
 
-    const radius = computed(() => { return vuexManage.getters.getRadius })
-
     const displayStores = ref([])
     const updateStores = () => {
       displayStores.value = []
-      const stores = vuexManage.getters.getPlaces
-      stores.forEach(element => {
+      mapController.placeAry.forEach(element => {
         let inner = []
         inner.push(element.name);
         inner.push(element['opening_hours']['open_now'] ? 'OPEN' : 'CLOSED')
@@ -93,25 +71,22 @@ export default {
       });
     }
 
-    const errorMessage = ref('')
-    const isDisplayList = computed(() => {
-      if (displayStores.value.length > 0) {
-        return true
-      } else if (displayStores.value.length === 0) {
-        errorMessage.value = '条件に一致する結果がありません。'
-        return false
-      } else {
-        errorMessage.value = 'データが取得できませんでした。'
-        return false
-      }
-    })
-
     watch(radius, () => {
-      vuexManage.dispatch('getPlaces')
+      mapController.getDataOfPlaceAry
       .then(() => {
         updateStores()
         mapRef.value.initMap()
       })
+    })
+
+    const isDisplayList = computed(() => {
+      if (displayStores.value.length > 0) return true
+      else return false
+    })
+
+    const errorMessage = computed(() => {
+      if (displayStores.value.length === 0) return '条件に一致する結果がありません。'
+      else return 'データが取得できませんでした。'
     })
 
     return {
