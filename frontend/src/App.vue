@@ -2,7 +2,7 @@
   <Header />
   <main>
     <SelectBox
-      v-model=""
+      v-model="radius"
     />
     <div id="flex-wrap">
       <section
@@ -17,8 +17,8 @@
         v-else
       >{{ errorMessage }}</p>
       <Map
-        :lat="latitude"
-        :long="longitude"
+        :lat="latlong.lat"
+        :long="latlong.long"
         ref="mapRef"
       />
     </div>
@@ -44,14 +44,16 @@ export default {
   },
   setup () {
     const mapController = new MapController()
-    const radius = ref(100)
 
+    const latlong = ref({})
+    const displayStores = ref([])
     const mapRef = ref({})
     mapController.getTerminalLocation()
+    latlong.value = mapController.latlong
      .then(() => {
-       mapController.getDataOfPlaceAry(radius.value)
+       mapController.getDataOfPlaceAry()
        .then(() => {
-         updateStores()
+         displayStores.value = mapController.createDisplayData()
          mapRef.value.initMap()
        })
      })
@@ -59,22 +61,12 @@ export default {
        console.error(error)
      })
 
-    const displayStores = ref([])
-    const updateStores = () => {
-      displayStores.value = []
-      mapController.placeAry.forEach(element => {
-        let inner = []
-        inner.push(element.name);
-        inner.push(element['opening_hours']['open_now'] ? 'OPEN' : 'CLOSED')
-        inner.push(element['opening_hours']['open_now'] ? 'green' : 'red')
-        displayStores.value.push(inner)
-      });
-    }
-
+    const radius = ref(100)
     watch(radius, () => {
+      mapController.radius = radius.value
       mapController.getDataOfPlaceAry
       .then(() => {
-        updateStores()
+        displayStores.value = mapController.createDisplayData()
         mapRef.value.initMap()
       })
     })
@@ -94,8 +86,7 @@ export default {
       isDisplayList,
       errorMessage,
       mapRef,
-      latitude,
-      longitude
+      latlong
     }
   }
 }

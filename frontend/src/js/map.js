@@ -1,11 +1,25 @@
 export default class mapDataController {
   constructor () {
-    this.location = {}
-    this.lat = null
-    this.long = null
+    this.latlong = {
+      lat: null,
+      long: null
+    }
     this.placeAry = []
     this.mapPointerAry = []
     this.#responseGcpPlaces = {}
+    this.radius = 100
+  }
+
+  createDisplayData () {
+    const returnData = []
+    this.placeAry.forEach(place => {
+      let inner = []
+      inner.push(place.name);
+      inner.push(place['opening_hours']['open_now'] ? 'OPEN' : 'CLOSED')
+      inner.push(place['opening_hours']['open_now'] ? 'green' : 'red')
+      returnData.push(inner)
+    })
+    return returnData
   }
 
   getTerminalLocation () {
@@ -19,11 +33,9 @@ export default class mapDataController {
       try {
         navigator.geolocation.getCurrentPosition(pos => {
           let cord = pos.coords
-          this.lat = Number(cord.latitude)
-          this.long = Number(cord.longitude)
-          this.location = `${latitude.value},${longitude.value}`
-
-          resolve(`${latitude.value},${longitude.value}`)
+          this.latlong.lat = Number(cord.latitude)
+          this.latlong.long = Number(cord.longitude)
+          resolve()
         }, () => {
           alert('位置情報の取得に失敗しました。')
           reject()
@@ -35,36 +47,37 @@ export default class mapDataController {
     })
   }
 
-  #setPlaceAry (data) {
-    this.placeAry = data.results.filter(item => item['opening_hours'] !== undefined)
+  #getPlaceAry (data) {
+    return data.results.filter(item => item['opening_hours'] !== undefined)
   }
 
   #setMapPoints () {
-    this.mapPointerAry = []
+    mapPointers = []
     this.places.forEach(place => {
       const item = {}
       item.name = place.name
       item.lat = Number(place.geometry.location.lat)
       item.long = Number(place.geometry.location.lng)
-      this.mapPointerAry.push(item)
+      mapPointers.push(item)
     })
+    return mapPointers
   }
 
-  async getDataOfPlaceAry (radius) {
+  async getDataOfPlaceAry () {
     const config = {
       method: 'get',
       url: 'http://localhost:80/api/places',
       params: {
-        'latlong': this.location,
-        'radius': radius
+        'latlong': `${this.latlong.lat},${this.latlong.long}`,
+        'radius': this.radius
       }
     }
 
     await axios(config)
       .then(function (response) {
         this.#responseGcpPlaces = response
-        this.#setPlaceAry(response.data)
-        this.#setMapPoints()
+        this.#placeAry = this.#getPlaceAry(response.data)
+        this.mapPointerAry = this.#setMapPoints()
       })
       .catch(function (error) {
         console.error(error)

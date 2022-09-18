@@ -34,13 +34,17 @@
 
 <script>
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 
 export default {
-  setup () {
-    const vuexManage = useStore()
+  props: {
+    radius: {
+      type: Number,
+      require: true
+    }
+  },
+  setup (_, { emit }) {
     const setRadius = e => {
-      vuexManage.commit('setRadius', e.target.value)
+      emit('radius', e.target.value)
     }
 
     const selected = ref('100')
