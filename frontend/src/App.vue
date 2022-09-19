@@ -10,7 +10,7 @@
         v-if="isDisplayList"
       >
         <Cards
-          :datas="displayStores"
+          :datas="displayLists"
         />
       </section>
       <p class="no-cards"
@@ -19,6 +19,7 @@
       <Map
         :lat="latlong.lat"
         :long="latlong.long"
+        :mapPointers="mapPointers"
         ref="mapRef"
       />
     </div>
@@ -33,7 +34,7 @@ import SelectBox from './components/SelectBox.vue'
 import Map from './components/Map.vue'
 import Cards from './components/Cards.vue'
 
-import MapController from './js/map.js'
+import ListDataCreater from './js/listDataCreater.js'
 
 export default {
   components: {
@@ -43,50 +44,57 @@ export default {
     Cards
   },
   setup () {
-    const mapController = new MapController()
+    const listDataCreater = new ListDataCreater()
 
     const latlong = ref({})
-    const displayStores = ref([])
-    const mapRef = ref({})
-    mapController.getTerminalLocation()
-    latlong.value = mapController.latlong
-     .then(() => {
-       mapController.getDataOfPlaceAry()
-       .then(() => {
-         displayStores.value = mapController.createDisplayData()
-         mapRef.value.initMap()
-       })
-     })
-     .catch(error => {
-       console.error(error)
-     })
-
+    const displayLists = ref([])
+    const mapPointers = ref([])
     const radius = ref(100)
-    watch(radius, () => {
-      mapController.radius = radius.value
-      mapController.getDataOfPlaceAry
+    const mapRef = ref({})
+    listDataCreater.getTerminalLocation()
+     .then(() => {
+      // set latlong
+      latlong.value = listDataCreater.latlong
+      listDataCreater.getDataOfPlaceAry()
       .then(() => {
-        displayStores.value = mapController.createDisplayData()
+        displayLists.value = listDataCreater.createDisplayData()
+        mapPointers.value = listDataCreater.mapPointerAry
+        mapRef.value.initMap()
+      })
+    })
+    .catch(error => {
+      console.error(error)
+    })
+
+    watch(radius, () => {
+      // reset radius
+      listDataCreater.radius = radius.value
+      listDataCreater.getDataOfPlaceAry()
+      .then(() => {
+        displayLists.value = listDataCreater.createDisplayData()
+        mapPointers.value = listDataCreater.mapPointerAry
         mapRef.value.initMap()
       })
     })
 
     const isDisplayList = computed(() => {
-      if (displayStores.value.length > 0) return true
+      if (displayLists.value.length > 0) return true
       else return false
     })
 
     const errorMessage = computed(() => {
-      if (displayStores.value.length === 0) return '条件に一致する結果がありません。'
+      if (displayLists.value.length === 0) return '条件に一致する結果がありません。'
       else return 'データが取得できませんでした。'
     })
 
     return {
-      displayStores,
+      displayLists,
       isDisplayList,
       errorMessage,
+      radius,
       mapRef,
-      latlong
+      latlong,
+      mapPointers
     }
   }
 }

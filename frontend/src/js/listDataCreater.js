@@ -1,4 +1,6 @@
-export default class mapDataController {
+import axios from 'axios'
+
+export default class listDataCreater {
   constructor () {
     this.latlong = {
       lat: null,
@@ -6,20 +8,19 @@ export default class mapDataController {
     }
     this.placeAry = []
     this.mapPointerAry = []
-    this.#responseGcpPlaces = {}
-    this.radius = 100
+    this.radius = null
   }
 
   createDisplayData () {
-    const returnData = []
+    const returnDataAry = []
     this.placeAry.forEach(place => {
       let inner = []
       inner.push(place.name);
       inner.push(place['opening_hours']['open_now'] ? 'OPEN' : 'CLOSED')
       inner.push(place['opening_hours']['open_now'] ? 'green' : 'red')
-      returnData.push(inner)
+      returnDataAry.push(inner)
     })
-    return returnData
+    return returnDataAry
   }
 
   getTerminalLocation () {
@@ -47,13 +48,13 @@ export default class mapDataController {
     })
   }
 
-  #getPlaceAry (data) {
-    return data.results.filter(item => item['opening_hours'] !== undefined)
+  getPlaceAry (data) {
+    return data.filter(item => item['opening_hours'] !== undefined)
   }
 
-  #setMapPoints () {
-    mapPointers = []
-    this.places.forEach(place => {
+  setMapPoints () {
+    const mapPointers = []
+    this.placeAry.forEach(place => {
       const item = {}
       item.name = place.name
       item.lat = Number(place.geometry.location.lat)
@@ -73,13 +74,15 @@ export default class mapDataController {
       }
     }
 
+    console.log(config)
+
     await axios(config)
-      .then(function (response) {
-        this.#responseGcpPlaces = response
-        this.#placeAry = this.#getPlaceAry(response.data)
-        this.mapPointerAry = this.#setMapPoints()
+      .then(response => {
+        console.log(response)
+        this.placeAry = this.getPlaceAry(response.data.results)
+        this.mapPointerAry = this.setMapPoints()
       })
-      .catch(function (error) {
+      .catch(error => {
         console.error(error)
       })
   }

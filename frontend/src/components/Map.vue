@@ -11,7 +11,6 @@
 <script>
 import { Loader } from '@googlemaps/js-api-loader'
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 
 export default {
   props: {
@@ -22,6 +21,10 @@ export default {
     long: {
       type: Number,
       require: true
+    },
+    mapPointers: {
+      type: Array,
+      require: true
     }
   },
   setup (props) {
@@ -29,7 +32,6 @@ export default {
       apiKey: import.meta.env.VITE_MAP_JS_API_KEY,
       version: "weekly"
     })
-    const vuexManage = useStore()
     const displayMapAreaRef = ref({})
     const isDisplayMap = ref(true)
 
@@ -49,7 +51,7 @@ export default {
 
         let marker = {}
         let latlong = {}
-        vuexManage.getters.getMapPoints.forEach(d => {
+        props.mapPointers.forEach(d => {
           latlong = new google.maps.LatLng(d.lat, d.long)
           marker = new google.maps.Marker({
             position: latlong,

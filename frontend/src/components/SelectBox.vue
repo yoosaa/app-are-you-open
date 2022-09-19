@@ -37,17 +37,20 @@ import { ref } from 'vue'
 
 export default {
   props: {
-    radius: {
+    modelValue: {
       type: Number,
       require: true
     }
   },
+  emits: ['update:modelValue'],
   setup (_, { emit }) {
-    const setRadius = e => {
-      emit('radius', e.target.value)
+    const selected = ref('100')
+
+    const setRadius = (e) => {
+      selected.value = e.target.value
+      emit('update:modelValue', Number(e.target.value))
     }
 
-    const selected = ref('100')
 
     return {
       setRadius,
