@@ -46,19 +46,26 @@ export default {
   setup () {
     const listDataCreater = new ListDataCreater()
 
+    const displayLists = computed(() => listDataCreater.displayList)
+    const mapPointers = computed(() => listDataCreater.mapPointers)
+    const isDisplayList = computed(() => {
+      if (displayLists.value.length > 0) return true
+      else return false
+    })
+    const errorMessage = computed(() => {
+      if (displayLists.value.length === 0) return '条件に一致する結果がありません。'
+      else return 'データが取得できませんでした。'
+    })
+
     const latlong = ref({})
-    const displayLists = ref([])
-    const mapPointers = ref([])
     const radius = ref(100)
     const mapRef = ref({})
     listDataCreater.getTerminalLocation()
      .then(() => {
-      // set latlong
       latlong.value = listDataCreater.latlong
       listDataCreater.getDataOfPlaceAry()
       .then(() => {
-        displayLists.value = listDataCreater.createDisplayData()
-        mapPointers.value = listDataCreater.mapPointerAry
+        listDataCreater.createDisplayData()
         mapRef.value.initMap()
       })
     })
@@ -67,25 +74,14 @@ export default {
     })
 
     watch(radius, () => {
-      // reset radius
       listDataCreater.radius = radius.value
       listDataCreater.getDataOfPlaceAry()
       .then(() => {
-        displayLists.value = listDataCreater.createDisplayData()
-        mapPointers.value = listDataCreater.mapPointerAry
+        listDataCreater.createDisplayData()
         mapRef.value.initMap()
       })
     })
 
-    const isDisplayList = computed(() => {
-      if (displayLists.value.length > 0) return true
-      else return false
-    })
-
-    const errorMessage = computed(() => {
-      if (displayLists.value.length === 0) return '条件に一致する結果がありません。'
-      else return 'データが取得できませんでした。'
-    })
 
     return {
       displayLists,
